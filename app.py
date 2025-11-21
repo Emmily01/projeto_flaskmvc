@@ -9,7 +9,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     descricao = db.Column(db.String(200), nullable=False)
@@ -24,7 +23,6 @@ class Item(db.Model):
 with app.app_context():
     db.create_all()
 
-
 @app.route('/')
 def index():
     total_ativos = Item.query.filter_by(status='Ativo').count()
@@ -37,7 +35,7 @@ def listar_itens():
 
 @app.route('/itens/novo', methods=['GET', 'POST'])
 def novo_item():
-
+    if request.method == 'POST':
         descricao = request.form['descricao']
         categoria = request.form['categoria']
         local = request.form['local']
