@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block conteudo %}
+    <h2>Acesso Restrito</h2>
+    
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for message in messages %}
+                <p style="color: red;">{{ message }}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form method="POST">
+        <div class="form-group">
+            <label>Usuário</label>
+            <input type="text" name="username" required>
+        </div>
+        <div class="form-group">
+            <label>Senha</label>
+            <input type="password" name="password" required>
+        </div>
+        <button type="submit" class="btn btn-blue">Entrar</button>
+    </form>
+    <p style="margin-top: 15px;">Não tem conta? <a href="{{ url_for('registro') }}">Registre-se aqui</a>.</p>
+{% endblock %}
