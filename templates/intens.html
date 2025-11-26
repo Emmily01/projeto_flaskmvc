@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+    <h2>Lista de Itens</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Descrição</th>
+                <th>Local</th>
+                <th>Status</th>
+                <th>Ação / Detalhes</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in itens %}
+            <tr>
+                <td>{{ item.descricao }} <br> <small>{{ item.categoria }}</small></td>
+                <td>{{ item.local }}</td>
+                
+                <td >
+                    {{ item.status }}
+                </td>
+                
+                <td>
+                    {% if item.status == 'Ativo' %}
+                        {% if current_user.is_authenticated %}
+                            <form action="{{ url_for('devolver_item', id=item.id) }}" method="POST" style="display: flex; gap: 5px;">
+                                <input type="text" name="nome_retirada" placeholder="Quem retirou?" required style="padding: 5px; width: 150px;">
+                                <button type="submit" class="btn btn-red" style="padding: 5px 10px; font-size: 0.8rem;">Devolver</button>
+                            </form>
+                        {% else %}
+                            <span>Faça login para gerenciar</span>
+                        {% endif %}
+                    {% else %}
+                        <span>Retirado por: <strong>{{ item.retirado_por }}</strong></span>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
