@@ -1,17 +1,34 @@
 {% extends "base.html" %}
 
 {% block conteudo %}
+<div style="text-align: center; padding: 40px;">
     <h2>Bem-vindo ao Sistema de Achados e Perdidos</h2>
+    <p>Utilize esta plataforma para localizar objetos perdidos ou registrar itens encontrados no campus.</p>
     
-    <p>Este sistema serve como ponto central de comunicação para objetos perdidos ou encontrados no campus.</p>
-    <p>Se encontrou algo, registe aqui para que o dono possa localizar. Se perdeu, consulte a lista de itens ativos.</p>
+    <br><br>
 
-    <div style="text-align: center; margin-top: 30px;">
-        <a href="{{ url_for('listar_itens') }}" class="btn btn-blue">Ver Itens Ativos</a>
-        <a href="{{ url_for('novo_item') }}" class="btn btn-green">Cadastrar Novo Item</a>
-    </div>
-    
-    <hr>
-    
-    <p style="text-align: center;">Atualmente temos <strong>{{ total }}</strong> itens aguardando recuperação.</p>
+    {% if current_user.is_authenticated %}
+        <p>Você está logado como administrador.</p>
+        
+        <a href="{{ url_for('listar_itens') }}" class="btn btn-blue">
+            Gerenciar Itens
+        </a>
+        
+        <a href="{{ url_for('novo_item') }}" class="btn btn-green">
+            Cadastrar Novo Item
+        </a>
+
+    {% else %}
+        <a href="{{ url_for('listar_itens') }}" class="btn btn-blue">
+            🔍 Consultar Itens Perdidos
+        </a>
+        
+        <br><br><hr><br>
+        
+        <p><small>É funcionário da secretaria?</small></p>
+        <a href="{{ url_for('login') }}" class="btn btn-blue">
+            Fazer Login Administrativo
+        </a>
+    {% endif %}
+</div>
 {% endblock %}
