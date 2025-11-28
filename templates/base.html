@@ -12,7 +12,7 @@
         <p>IFRN - Campus Caicó</p>
     </header>
     
-   <nav>
+    <nav>
         <a href="{{ url_for('index') }}">Início</a>
         <a href="{{ url_for('listar_itens') }}">Ver Itens</a>
         
@@ -26,6 +26,16 @@
     </nav>
 
     <div class="container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div style="background-color: #dff0d8; color: #3c763d; padding: 10px; margin-bottom: 15px; border-radius: 5px;">
+                    {% for message in messages %}
+                        {{ message }}<br>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
         {% block conteudo %}{% endblock %}
     </div>
 </body>
