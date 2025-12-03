@@ -20,5 +20,4 @@ except mysql.connector.Error as err:
 finally:
     if 'conexao' in locals() and conexao.is_connected():
         cursor.close()
-
         conexao.close()
