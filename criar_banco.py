@@ -1,11 +1,8 @@
-# Arquivo: criar_banco.py
 import mysql.connector
 
 print("Conectando ao MySQL...")
 
 try:
-    # Conexão sem especificar banco, apenas para criar
-    # Note a senha vazia: password=""
     conexao = mysql.connector.connect(
         host="localhost",
         user="root",
@@ -23,4 +20,5 @@ except mysql.connector.Error as err:
 finally:
     if 'conexao' in locals() and conexao.is_connected():
         cursor.close()
+
         conexao.close()
