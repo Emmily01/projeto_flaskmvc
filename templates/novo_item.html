@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+    <h2>Cadastrar Novo Item</h2>
+    <p>Preencha os detalhes do objeto encontrado.</p>
+
+    <form action="{{ url_for('itens.novo_item') }}" method="POST">
+        <div class="form-group">
+            <label for="descricao">Descrição (ex: "Chaveiro com coruja")</label>
+            <input type="text" id="descricao" name="descricao" required maxlength="200">
+        </div>
+
+        <div class="form-group">
+            <label for="categoria">Categoria</label>
+            <select id="categoria" name="categoria" required>
+                <option value="Cadernos/Livros">Cadernos/Livros</option>
+                <option value="Eletronicos">Eletrônicos (Pen drive, Fone)</option>
+                <option value="Roupas/Acessorios">Roupas/Acessórios</option>
+                <option value="Outros">Outros</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="local">Local onde foi encontrado/perdido</label>
+            <input type="text" id="local" name="local" required maxlength="100" placeholder="Ex: Sala 12, Pátio, Biblioteca">
+        </div>
+
+        <button type="submit" class="btn btn-green">Salvar Item</button>
+        <a href="{{ url_for('itens.listar_itens') }}" style="margin-left: 10px; color: #555;">Cancelar</a>
+    </form>
+{% endblock %}

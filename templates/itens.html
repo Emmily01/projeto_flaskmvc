@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h2>Itens Registrados</h2>
+        {% if current_user.is_authenticated %}
+            <a href="{{ url_for('itens.novo_item') }}" class="btn btn-green">+ Novo Item</a>
+        {% endif %}
+    </div>
+
+    {% if not itens %}
+        <div class="alert alert-warning" style="text-align: center;">
+            Nenhum item registrado no momento.
+        </div>
+    {% else %}
+        <div style="overflow-x: auto;"> <table>
+                <thead>
+                    <tr>
+                        <th>Descrição</th>
+                        <th>Categoria</th>
+                        <th>Local</th>
+                        <th>Data</th>
+                        <th>Status</th>
+                        <th>Ações / Detalhes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in itens %}
+                    <tr>
+                        <td><strong>{{ item.descricao }}</strong></td>
+                        <td>{{ item.categoria }}</td>
+                        <td>{{ item.local_encontrado }}</td>
+                        <td>{{ item.data_registro.strftime('%d/%m/%Y') }}</td>
+                        
+                        <td>
+                            {% if item.status == 'Ativo' %}
+                                <span style="color: green; font-weight: bold;">Disponível</span>
+                            {% else %}
+                                <span style="color: gray;">Devolvido</span>
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if current_user.is_authenticated %}
+                                
+                                {% if item.status == 'Ativo' %}
+                                    <form action="{{ url_for('itens.devolver_item', id=item.id) }}" method="POST" style="display: flex; gap: 5px; margin-bottom: 10px;">
+                                        <input type="text" name="nome_retirada" placeholder="Quem retirou?" required style="padding: 5px; width: 120px; font-size: 0.8rem;">
+                                        <button type="submit" class="btn btn-green" style="padding: 5px 8px; font-size: 0.8rem;">OK</button>
+                                    </form>
+                                {% else %}
+                                    <small>Entregue para:<br><strong>{{ item.retirado_por }}</strong></small>
+                                    <br><br>
+                                {% endif %}
+
+                                <div style="display: flex; gap: 10px; align-items: center;">
+                                    <a href="{{ url_for('itens.editar_item', id=item.id) }}" class="btn btn-blue" style="padding: 4px 8px; font-size: 0.8rem;">Editar</a>
+
+                                    <form action="{{ url_for('itens.remover_item', id=item.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja excluir este item permanentemente?');">
+                                        <button type="submit" class="btn btn-red" style="padding: 4px 8px; font-size: 0.8rem;">Excluir</button>
+                                    </form>
+                                </div>
+
+                            {% else %}
+                                {% if item.status == 'Devolvido' %}
+                                    <small>Item já foi retirado por: {{ item.retirado_por }}</small>
+                                {% else %}
+                                    <span style="color: #f5821f; font-weight: bold;">Na Secretaria</span>
+                                {% endif %}
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endif %}
+
+    <div style="margin-top: 20px;">
+        <a href="{{ url_for('index') }}" style="color: #666; text-decoration: underline;">&larr; Voltar ao Início</a>
+    </div>
+
+{% endblock %}
