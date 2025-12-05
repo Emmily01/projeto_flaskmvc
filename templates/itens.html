@@ -2,27 +2,28 @@
 
 {% block conteudo %}
     
-    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-        <h2>Itens Registrados</h2>
+    <div class="page-header">
+        <h2>Itens na Secretaria</h2>
+        
         {% if current_user.is_authenticated %}
-            <a href="{{ url_for('itens.novo_item') }}" class="btn btn-green">+ Novo Item</a>
+            <a href="{{ url_for('itens.novo_item') }}" class="btn btn-green">+ Cadastrar Novo Item</a>
         {% endif %}
     </div>
 
     {% if not itens %}
-        <div style="text-align: center; padding: 20px; background-color: #fff; border-radius: 10px;">
-            Nenhum item registrado no momento.
+        <div class="empty-state">
+            <p class="empty-text">Nenhum item registrado no momento.</p>
         </div>
     {% else %}
-        <div style="overflow-x: auto;"> 
+        <div class="table-responsive"> 
             <table>
                 <thead>
                     <tr>
                         <th>Descrição</th>
                         <th>Categoria</th>
                         <th>Local Encontrado</th>
-                        <th>Data Registro</th>
-                        <th>Status</th>
+                        <th>Data Chegada</th>
+                        <th>Situação</th>
                         <th>Ações / Detalhes</th>
                     </tr>
                 </thead>
@@ -36,41 +37,50 @@
                         
                         <td>
                             {% if item.status == 'Ativo' %}
-                                <span style="color: green; font-weight: bold; background: #e8f5e9; padding: 5px 10px; border-radius: 15px;">Disponível</span>
+                                <span class="status-badge active">
+                                    Na Secretaria
+                                </span>
                             {% else %}
-                                <span style="color: #c0392b; font-weight: bold; background: #fadbd8; padding: 5px 10px; border-radius: 15px;">Emprestado</span>
+                                <span class="status-badge returned">
+                                    Devolvido
+                                </span>
                             {% endif %}
                         </td>
 
                         <td>
-                            {# Lógica para Usuário Logado (Funcionário) #}
+                            {# VISÃO DO FUNCIONÁRIO (LOGADO) #}
                             {% if current_user.is_authenticated %}
                                 
                                 {% if item.status == 'Ativo' %}
-                                    <form action="{{ url_for('itens.devolver_item', id=item.id) }}" method="POST" style="display: flex; gap: 5px; margin-bottom: 10px;">
-                                        <input type="text" name="nome_retirada" placeholder="Nome de quem vai pegar" required style="padding: 5px; width: 150px; font-size: 0.85rem;">
-                                        <button type="submit" class="btn btn-green" style="padding: 5px 10px; font-size: 0.8rem;">Emprestar</button>
+                                    <form action="{{ url_for('itens.devolver_item', id=item.id) }}" method="POST" class="return-form">
+                                        <input type="text" name="nome_retirada" placeholder="Quem recebeu?" required class="return-input">
+                                        <button type="submit" class="btn btn-green btn-small" title="Registrar devolução ao dono">
+                                            Entregar
+                                        </button>
                                     </form>
                                 {% else %}
-                                    <div style="margin-bottom: 10px; font-size: 0.9rem;">
-                                        Está com: <strong>{{ item.retirado_por }}</strong>
+                                    <div class="recipient-info">
+                                        Entregue a: <strong>{{ item.retirado_por }}</strong>
+                                        <br><small>{{ item.data_devolucao.strftime('%d/%m/%Y') if item.data_devolucao else '' }}</small>
                                     </div>
                                 {% endif %}
 
-                                <div style="display: flex; gap: 5px; align-items: center;">
-                                    <a href="{{ url_for('itens.editar_item', id=item.id) }}" class="btn btn-blue" style="padding: 5px 10px; font-size: 0.8rem;">Editar</a>
+                                <div class="action-buttons-cell">
+                                    <a href="{{ url_for('itens.editar_item', id=item.id) }}" class="btn btn-blue btn-small">Editar</a>
 
-                                    <form action="{{ url_for('itens.remover_item', id=item.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja excluir?');">
-                                        <button type="submit" class="btn btn-red" style="padding: 5px 10px; font-size: 0.8rem;">Excluir</button>
+                                    <form action="{{ url_for('itens.remover_item', id=item.id) }}" method="POST" style="display:inline;" onsubmit="return confirm('Tem certeza que deseja apagar este registro permanentemente?');">
+                                        <button type="submit" class="btn btn-red btn-small">Excluir</button>
                                     </form>
                                 </div>
 
-                            {# Lógica para Visitante (Público) #}
+                            {# VISÃO DO ALUNO/PÚBLICO (NÃO LOGADO) #}
                             {% else %}
-                                {% if item.status == 'Emprestado' or item.status == 'Devolvido' %}
-                                    <span style="color: #c0392b;">Está com: <strong>{{ item.retirado_por }}</strong></span>
+                                {% if item.status == 'Devolvido' %}
+                                    <span class="status-text-returned">Já foi retirado por: <strong>{{ item.retirado_por }}</strong></span>
                                 {% else %}
-                                    <span style="color: #f5821f;">Disponível na Secretaria</span>
+                                    <span class="status-text-available">
+                                        Disponível para retirada. <br>Procure a coordenação.
+                                    </span>
                                 {% endif %}
                             {% endif %}
                         </td>
@@ -81,8 +91,8 @@
         </div>
     {% endif %}
 
-    <div style="margin-top: 20px;">
-        <a href="{{ url_for('index') }}" style="color: #666; text-decoration: none;">&larr; Voltar ao Início</a>
+    <div class="back-link-container">
+        <a href="{{ url_for('index') }}" class="back-link">&larr; Voltar ao Início</a>
     </div>
 
 {% endblock %}

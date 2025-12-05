@@ -12,26 +12,26 @@
         <p>IFRN - Campus Caicó</p>
     </header>
     
-<nav>
+    <nav>
         <a href="{{ url_for('index') }}">Início</a>
         <a href="{{ url_for('itens.listar_itens') }}">Ver Itens</a>
         
         {% if current_user.is_authenticated %}
             <a href="{{ url_for('itens.novo_item') }}">Cadastrar Item</a>
-            <span style="color: #666; margin: 0 15px; font-weight: bold;">
+            <span class="nav-user-greeting">
                 Olá, {{ current_user.username }}
             </span>
-            <a href="{{ url_for('auth.logout') }}" style="color: #d6336c;">Sair (Logout)</a>
+            <a href="{{ url_for('auth.logout') }}" class="nav-logout">Sair (Logout)</a>
         {% else %}
             <a href="{{ url_for('auth.registro') }}">Criar Conta</a>
-            <a href="{{ url_for('auth.login') }}" class="btn btn-green" style="padding: 5px 15px; color: white;">Entrar / Login</a>
+            <a href="{{ url_for('auth.login') }}" class="btn btn-green btn-nav-login">Entrar / Login</a>
         {% endif %}
     </nav>
 
     <div class="container">
         {% with messages = get_flashed_messages() %}
             {% if messages %}
-                <div style="background-color: #dff0d8; color: #3c763d; padding: 10px; margin-bottom: 15px; border-radius: 5px;">
+                <div class="flash-message-container">
                     {% for message in messages %}
                         {{ message }}<br>
                     {% endfor %}
@@ -41,5 +41,61 @@
 
         {% block conteudo %}{% endblock %}
     </div>
+
+    <footer>
+        <div class="footer-content">
+            <div class="footer-section logo-section">
+                <div class="footer-logo">
+                    <span class="icon-lupa">🔍</span>
+                    <div class="logo-text">
+                        <span>Achados e</span>
+                        <strong>PERDIDOS</strong>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-section links-section">
+                <div class="link-column">
+                    <h4>Sobre</h4>
+                    <ul>
+                        <li><a href="#">Institucional</a></li>
+                        <li><a href="#">Dúvidas</a></li>
+                        <li><a href="#">Notícias</a></li>
+                        <li><a href="#">Contato</a></li>
+                    </ul>
+                </div>
+                <div class="link-column spacer">
+                    <ul>
+                        <li><a href="#">Publicações</a></li>
+                        <li><a href="#">Pedidos</a></li>
+                        <li><a href="#">Dados</a></li>
+                        <li><a href="#">Cursos</a></li>
+                        <li><a href="#">Quer ajuda?</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="footer-section social-section">
+                <a href="#" class="social-icon">🐦</a> 
+                <a href="#" class="social-icon">f</a>  
+            </div>
+        </div>
+
+        <hr class="footer-divider">
+
+        <div class="footer-bottom">
+            <div class="copyright">
+                <span class="cc-logo">CC BY</span> 
+                <p>Todo o nosso conteúdo pode ser publicado ou reutilizado de forma gratuita, exceto a maioria das fotografias, ilustrações e vídeos.<br>
+                <strong>Termos de Uso</strong> e <strong>Política de Privacidade</strong></p>
+            </div>
+            <div class="year">
+                2025 © Achados e Perdidos.
+            </div>
+        </div>
+    </footer>
+    
+    <a href="#" class="floating-chat">💬</a>
+
 </body>
 </html>

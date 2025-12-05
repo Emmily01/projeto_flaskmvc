@@ -8,6 +8,7 @@ itens_bp = Blueprint('itens', __name__)
 
 @itens_bp.route('/itens')
 def listar_itens():
+    # Ordena: Mais recentes primeiro
     itens = Item.query.order_by(Item.data_registro.desc()).all()
     return render_template('itens.html', itens=itens)
 
@@ -23,12 +24,12 @@ def novo_item():
             descricao=descricao,
             categoria=categoria,
             local_encontrado=local,
-            status='Ativo'
+            status='Ativo' # Item chega como Ativo (Na secretaria)
         )
         
         db.session.add(novo_item)
         db.session.commit()
-        flash('Item registrado com sucesso!', 'success')
+        flash('Item registrado na secretaria com sucesso!', 'success')
         return redirect(url_for('itens.listar_itens'))
     
     return render_template('novo_item.html')
@@ -44,7 +45,7 @@ def editar_item(id):
         item.local_encontrado = request.form['local']
         
         db.session.commit()
-        flash('Item atualizado com sucesso.', 'success')
+        flash('Informações do item atualizadas.', 'success')
         return redirect(url_for('itens.listar_itens'))
         
     return render_template('editar_item.html', item=item)
@@ -55,20 +56,21 @@ def remover_item(id):
     item = Item.query.get_or_404(id)
     db.session.delete(item)
     db.session.commit()
-    flash('Item removido.', 'success')
+    flash('Registro removido do sistema.', 'info')
     return redirect(url_for('itens.listar_itens'))
 
-# Rota para "Pedir/Emprestar" o item
+# Rota para DEVOLVER ao dono (Antes estava "Emprestar")
 @itens_bp.route('/itens/<int:id>/devolver', methods=['POST'])
 @login_required
 def devolver_item(id):
     item = Item.query.get_or_404(id)
     nome_quem_pegou = request.form['nome_retirada']
     
-    item.status = 'Emprestado'
+    # Atualiza status para Devolvido
+    item.status = 'Devolvido'
     item.retirado_por = nome_quem_pegou
     item.data_devolucao = datetime.now()
     
     db.session.commit()
-    flash(f'Item marcado como emprestado para {nome_quem_pegou}.', 'info')
+    flash(f'Item devolvido para {nome_quem_pegou}. Caso encerrado.', 'success')
     return redirect(url_for('itens.listar_itens'))

@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
 {% block conteudo %}
-<div style="max-width: 400px; margin: 0 auto;">
+<div class="auth-container">
     <h2 style="text-align: center;">Criar Nova Conta</h2>
     
     {% with messages = get_flashed_messages() %}
         {% if messages %}
             {% for message in messages %}
-                <p style="color: red; text-align: center;">{{ message }}</p>
+                <p class="text-center-error">{{ message }}</p>
             {% endfor %}
         {% endif %}
     {% endwith %}
@@ -21,7 +21,7 @@
             <label>Escolha uma Senha</label>
             <input type="password" name="password" required placeholder="******">
         </div>
-        <button type="submit" class="btn btn-blue" style="width: 100%;">Cadastrar</button>
+        <button type="submit" class="btn btn-blue btn-full">Cadastrar</button>
     </form>
 </div>
 {% endblock %}

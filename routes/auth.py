@@ -12,14 +12,23 @@ def login():
         username = request.form['username']
         password = request.form['password']
         
+        # Busca o usuário no banco
         user = User.query.filter_by(username=username).first()
         
-        if user and check_password_hash(user.password, password):
-            login_user(user)
-            flash('Login realizado com sucesso!', 'success')
-            return redirect(url_for('index')) 
-        else:
-            flash('Usuário ou senha incorretos.', 'danger')
+        # 1. Se o usuário NÃO existe, redireciona para o cadastro (Seu pedido)
+        if not user:
+            flash('Usuário não encontrado. Por favor, faça seu cadastro primeiro.', 'warning')
+            return redirect(url_for('auth.registro'))
+
+        # 2. Se existe, verifica a senha
+        if not check_password_hash(user.password, password):
+            flash('Senha incorreta. Tente novamente.', 'danger')
+            return redirect(url_for('auth.login'))
+            
+        # 3. Se tudo estiver certo, faz o login
+        login_user(user)
+        flash(f'Bem-vindo de volta, {user.username}!', 'success')
+        return redirect(url_for('index')) 
             
     return render_template('login.html')
 
@@ -29,18 +38,22 @@ def registro():
         username = request.form['username']
         password = request.form['password']
         
-        # Gera o hash da senha para segurança
+        # Verifica se usuário já existe antes de tentar criar
+        user_exists = User.query.filter_by(username=username).first()
+        if user_exists:
+            flash('Erro: Esse nome de usuário já está em uso.', 'danger')
+            return redirect(url_for('auth.registro'))
+
         hashed_password = generate_password_hash(password)
-        
         novo_user = User(username=username, password=hashed_password)
         
         try:
             db.session.add(novo_user)
             db.session.commit()
-            flash('Conta criada com sucesso! Faça login.', 'success')
+            flash('Conta criada com sucesso! Agora faça seu login.', 'success')
             return redirect(url_for('auth.login'))
         except Exception as e:
-            flash('Erro: Esse nome de usuário já existe.', 'danger')
+            flash('Erro ao criar conta. Tente novamente.', 'danger')
             
     return render_template('registro.html')
 
