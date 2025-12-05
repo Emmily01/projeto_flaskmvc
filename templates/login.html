@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+<div style="max-width: 400px; margin: 0 auto; text-align: center;">
+    <h2>Acessar Sistema</h2>
+    <p>Insira seus dados para continuar.</p>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div style="color: red; background: #ffe6e6; padding: 10px; margin-bottom: 15px; border-radius: 5px;">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <form action="{{ url_for('auth.login') }}" method="POST" style="text-align: left;">
+        <div class="form-group">
+            <label for="username">Usuário</label>
+            <input type="text" name="username" placeholder="Digite seu usuário" required>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Senha</label>
+            <input type="password" name="password" placeholder="Digite sua senha" required>
+        </div>
+
+        <button type="submit" class="btn btn-green" style="width: 100%;">Entrar</button>
+    </form>
+    
+    <div style="margin-top: 20px;">
+        <p>Ainda não tem conta? <a href="{{ url_for('auth.registro') }}">Cadastre-se aqui</a>.</p>
+    </div>
+</div>
+{% endblock %}

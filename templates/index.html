@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block conteudo %}
+<div style="text-align: center; padding: 60px 20px;">
+    <h2 style="font-size: 2.5rem; color: #f5821f;">Achados e Perdidos</h2>
+    <p style="color: #666; font-size: 1.1rem; max-width: 600px; margin: 0 auto 40px auto;">
+        Utilize esta plataforma para localizar objetos perdidos ou registrar itens encontrados no campus com transparência e agilidade.
+    </p>
+
+    {% if current_user.is_authenticated %}
+        <div style="background-color: #fff; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); display: inline-block; border: 1px solid #eee;">
+            <p style="margin-bottom: 20px; font-size: 1.2rem;"><strong>Olá, Administrador!</strong></p>
+            
+            <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                <a href="{{ url_for('itens.listar_itens') }}" class="btn btn-blue">
+                    📂 Gerenciar Itens
+                </a>
+                
+                <a href="{{ url_for('itens.novo_item') }}" class="btn btn-green">
+                    + Cadastrar Novo Item
+                </a>
+            </div>
+        </div>
+
+    {% else %}
+        <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+            <a href="{{ url_for('itens.listar_itens') }}" class="btn btn-green" style="padding: 15px 40px; font-size: 1rem;">
+                🔍 Consultar Itens Perdidos
+            </a>
+            
+            <a href="{{ url_for('auth.login') }}" class="btn btn-blue" style="padding: 15px 40px; font-size: 1rem;">
+                🔐 Acesso Restrito
+            </a>
+        </div>
+    {% endif %}
+    
+    <div style="margin-top: 60px; display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; text-align: left;">
+        
+        <div style="background-color: #fdb913; padding: 30px; border-radius: 15px; color: #fff;">
+            <h3 style="margin-top: 0;">Está procurando?</h3>
+            <p>Verifique a lista atualizada diariamente pela secretaria.</p>
+        </div>
+
+        <div style="background-color: #f5821f; padding: 30px; border-radius: 15px; color: #fff;">
+            <h3 style="margin-top: 0;">Achou algo?</h3>
+            <p>Entregue na coordenação para que possamos registrar no sistema.</p>
+        </div>
+
+    </div>
+</div>
+{% endblock %}
