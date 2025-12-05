@@ -5,11 +5,7 @@ from routes.auth import auth_bp
 from routes.itens import itens_bp
 
 app = Flask(__name__)
-
-import os
-
-basedir = os.path.abspath(os.path.dirname(__file__))
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'instance', 'achados_perdidos.db')
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+mysqlconnector://root:@localhost/central_achados'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'chave_super_secreta_projeto'
 
@@ -32,4 +28,5 @@ def index():
 if __name__ == '__main__':
     with app.app_context():
         db.create_all()  
+
     app.run(debug=True)
