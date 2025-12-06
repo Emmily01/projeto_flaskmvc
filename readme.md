@@ -4,7 +4,9 @@ Este projeto é uma aplicação web desenvolvida em Python com Flask, seguindo o
 
 ## Integrantes do Grupo
 Carla Gabriele da Silva Santos
+
 Ingrid Monteiro de Melo 
+
 Emmily Kettily Bezerra da Silva
 
 ## Tecnologias Utilizadas
@@ -67,4 +69,5 @@ https://www.google.com/search?q=http://127.0.0.1:5000
 * Gestão Total: Edição e remoção de registros incorretos.
   
 * Devolução (Baixa): Registro de quem retirou o objeto e a data da saída, mudando o status automaticamente para "Devolvido".
+
 
