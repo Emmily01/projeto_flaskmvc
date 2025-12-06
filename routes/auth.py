@@ -11,7 +11,7 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-                user = User.query.filter_by(username=username).first()
+        user = User.query.filter_by(username=username).first()
         
         if not user:
             flash('Usuário não encontrado. Por favor, faça seu cadastro primeiro.', 'warning')
@@ -31,7 +31,8 @@ def registro():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
-                user_exists = User.query.filter_by(username=username).first()
+        user_exists = User.query.filter_by(username=username).first()
+        
         if user_exists:
             flash('Erro: Esse nome de usuário já está em uso.', 'danger')
             return redirect(url_for('auth.registro'))
