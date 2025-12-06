@@ -37,17 +37,16 @@ source venv/bin/activate
 
 Bash
 
-
 pip install flask flask-sqlalchemy flask-login mysql-connector-python werkzeug
 
 
-4. Executando o Sistema
+### 3. Executando o Sistema
 Inicie o servidor Flask com o comando:
 
 Bash
 
 python app.py
-5. Acessando
+### 4. Acessando
 Abra o navegador e digite:
 
 https://www.google.com/search?q=http://127.0.0.1:5000
@@ -68,3 +67,4 @@ https://www.google.com/search?q=http://127.0.0.1:5000
 * Gestão Total: Edição e remoção de registros incorretos.
   
 * Devolução (Baixa): Registro de quem retirou o objeto e a data da saída, mudando o status automaticamente para "Devolvido".
+
