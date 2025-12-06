@@ -19,11 +19,13 @@ def novo_item():
         categoria = request.form['categoria']
         local = request.form['local']
         
+        # CORREÇÃO: Parêntese de fecho adicionado abaixo
         novo_item = Item(
             descricao=descricao,
             categoria=categoria,
             local_encontrado=local,
             status='Ativo' 
+        )
         
         db.session.add(novo_item)
         db.session.commit()
